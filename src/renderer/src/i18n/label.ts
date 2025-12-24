@@ -185,6 +185,7 @@ const sidebarIconKeyMap = {
   knowledge: 'knowledge.title',
   files: 'files.title',
   code_tools: 'code.title',
+  ide: 'ide.title',
   notes: 'notes.title'
 } as const
 

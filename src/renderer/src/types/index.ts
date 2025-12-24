@@ -588,6 +588,7 @@ export type SidebarIcon =
   | 'knowledge'
   | 'files'
   | 'code_tools'
+  | 'ide'
   | 'notes'
 
 export type ExternalToolResult = {
