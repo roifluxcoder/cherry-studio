@@ -136,7 +136,8 @@ const MainMenus: FC = () => {
     knowledge: <FileSearch size={18} className="icon" />,
     files: <Folder size={18} className="icon" />,
     notes: <NotepadText size={18} className="icon" />,
-    code_tools: <Code size={18} className="icon" />
+    code_tools: <Code size={18} className="icon" />,
+    ide: <Code size={18} className="icon" strokeWidth={2.5} />
   }
 
   const pathMap = {
@@ -148,6 +149,7 @@ const MainMenus: FC = () => {
     knowledge: '/knowledge',
     files: '/files',
     code_tools: '/code',
+    ide: '/ide',
     notes: '/notes'
   }
 
