@@ -359,6 +359,21 @@ export enum IpcChannel {
   CodeTools_GetCustomTerminalPath = 'code-tools:get-custom-terminal-path',
   CodeTools_RemoveCustomTerminalPath = 'code-tools:remove-custom-terminal-path',
 
+  // IDE
+  IDE_GetWorkspacePath = 'ide:get-workspace-path',
+  IDE_ListFiles = 'ide:list-files',
+  IDE_ReadFile = 'ide:read-file',
+  IDE_WriteFile = 'ide:write-file',
+  IDE_CreateFile = 'ide:create-file',
+  IDE_DeleteFile = 'ide:delete-file',
+  IDE_RenameFile = 'ide:rename-file',
+  IDE_CreateFolder = 'ide:create-folder',
+  IDE_DeleteFolder = 'ide:delete-folder',
+  IDE_RunCode = 'ide:run-code',
+  IDE_ExecuteCommand = 'ide:execute-command',
+  IDE_TerminalOutput = 'ide:terminal-output',
+  IDE_AskAI = 'ide:ask-ai',
+
   // OCR
   OCR_ocr = 'ocr:ocr',
   OCR_ListProviders = 'ocr:list-providers',

@@ -49,6 +49,7 @@ import DxtService from './services/DxtService'
 import { ExportService } from './services/ExportService'
 import { fileStorage as fileManager } from './services/FileStorage'
 import FileService from './services/FileSystemService'
+import { ideService } from './services/IDEService'
 import KnowledgeService from './services/KnowledgeService'
 import { lanTransferClientService } from './services/lanTransfer'
 import { localTransferService } from './services/LocalTransferService'
@@ -965,6 +966,40 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
   )
   ipcMain.handle(IpcChannel.CodeTools_RemoveCustomTerminalPath, (_, terminalId: string) =>
     codeToolsService.removeCustomTerminalPath(terminalId)
+  )
+
+  // IDE
+  ipcMain.handle(IpcChannel.IDE_GetWorkspacePath, () => ideService.getWorkspacePath())
+  ipcMain.handle(IpcChannel.IDE_ListFiles, () => ideService.listFiles())
+  ipcMain.handle(IpcChannel.IDE_ReadFile, (_, filePath: string) => ideService.readFile(filePath))
+  ipcMain.handle(IpcChannel.IDE_WriteFile, (_, filePath: string, content: string) =>
+    ideService.writeFile(filePath, content)
+  )
+  ipcMain.handle(IpcChannel.IDE_CreateFile, (_, folderPath: string, fileName: string) =>
+    ideService.createFile(folderPath, fileName)
+  )
+  ipcMain.handle(IpcChannel.IDE_DeleteFile, (_, filePath: string) => ideService.deleteFile(filePath))
+  ipcMain.handle(IpcChannel.IDE_RenameFile, (_, oldPath: string, newPath: string) =>
+    ideService.renameFile(oldPath, newPath)
+  )
+  ipcMain.handle(IpcChannel.IDE_CreateFolder, (_, parentPath: string, folderName: string) =>
+    ideService.createFolder(parentPath, folderName)
+  )
+  ipcMain.handle(IpcChannel.IDE_DeleteFolder, (_, folderPath: string) => ideService.deleteFolder(folderPath))
+  ipcMain.handle(
+    IpcChannel.IDE_RunCode,
+    (_, params: { filePath: string; language: string; content: string }) => ideService.runCode(params)
+  )
+  ipcMain.handle(IpcChannel.IDE_ExecuteCommand, (_, command: string) => ideService.executeCommand(command))
+  ipcMain.handle(
+    IpcChannel.IDE_AskAI,
+    async (_, params: { message: string; fileContent?: string; fileName?: string; conversationHistory?: any[] }) => {
+      // TODO: Integrate with existing AI service
+      // For now, return a placeholder response
+      return {
+        content: 'AI integration will be implemented. Your message: ' + params.message
+      }
+    }
   )
 
   // OCR

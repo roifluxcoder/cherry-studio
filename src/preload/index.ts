@@ -548,6 +548,37 @@ const api = {
     removeCustomTerminalPath: (terminalId: string): Promise<void> =>
       ipcRenderer.invoke(IpcChannel.CodeTools_RemoveCustomTerminalPath, terminalId)
   },
+  ide: {
+    getWorkspacePath: (): Promise<string> => ipcRenderer.invoke(IpcChannel.IDE_GetWorkspacePath),
+    listFiles: (): Promise<any[]> => ipcRenderer.invoke(IpcChannel.IDE_ListFiles),
+    readFile: (filePath: string): Promise<string> => ipcRenderer.invoke(IpcChannel.IDE_ReadFile, filePath),
+    writeFile: (filePath: string, content: string): Promise<void> =>
+      ipcRenderer.invoke(IpcChannel.IDE_WriteFile, filePath, content),
+    createFile: (folderPath: string, fileName: string): Promise<string> =>
+      ipcRenderer.invoke(IpcChannel.IDE_CreateFile, folderPath, fileName),
+    deleteFile: (filePath: string): Promise<void> => ipcRenderer.invoke(IpcChannel.IDE_DeleteFile, filePath),
+    renameFile: (oldPath: string, newPath: string): Promise<void> =>
+      ipcRenderer.invoke(IpcChannel.IDE_RenameFile, oldPath, newPath),
+    createFolder: (parentPath: string, folderName: string): Promise<string> =>
+      ipcRenderer.invoke(IpcChannel.IDE_CreateFolder, parentPath, folderName),
+    deleteFolder: (folderPath: string): Promise<void> => ipcRenderer.invoke(IpcChannel.IDE_DeleteFolder, folderPath),
+    runCode: (params: { filePath: string; language: string; content: string }): Promise<{ success: boolean; error?: string }> =>
+      ipcRenderer.invoke(IpcChannel.IDE_RunCode, params),
+    executeCommand: (command: string): Promise<void> => ipcRenderer.invoke(IpcChannel.IDE_ExecuteCommand, command),
+    onTerminalOutput: (callback: (data: string) => void): (() => void) => {
+      const listener = (_: Electron.IpcRendererEvent, data: string) => callback(data)
+      ipcRenderer.on(IpcChannel.IDE_TerminalOutput, listener)
+      return () => {
+        ipcRenderer.removeListener(IpcChannel.IDE_TerminalOutput, listener)
+      }
+    },
+    askAI: (params: {
+      message: string
+      fileContent?: string
+      fileName?: string
+      conversationHistory?: any[]
+    }): Promise<{ content: string }> => ipcRenderer.invoke(IpcChannel.IDE_AskAI, params)
+  },
   ocr: {
     ocr: (file: SupportedOcrFile, provider: OcrProvider): Promise<OcrResult> =>
       ipcRenderer.invoke(IpcChannel.OCR_ocr, file, provider),
