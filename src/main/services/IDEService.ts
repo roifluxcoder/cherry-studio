@@ -3,7 +3,8 @@ import path from 'node:path'
 import { exec } from 'node:child_process'
 import { promisify } from 'node:util'
 import { loggerService } from '@logger'
-import { app } from 'electron'
+import { app, BrowserWindow } from 'electron'
+import { IpcChannel } from '@shared/IpcChannel'
 
 const execAsync = promisify(exec)
 const logger = loggerService.withContext('IDEService')
@@ -17,12 +18,17 @@ export interface FileNode {
 
 class IDEService {
   private workspacePath: string
+  private targetWindow: BrowserWindow | null = null
 
   constructor() {
     // Initialize workspace in ~/.cherrystudio/workspace/
     const homeDir = app.getPath('home')
     this.workspacePath = path.join(homeDir, '.cherrystudio', 'workspace')
     this.ensureWorkspace()
+  }
+
+  setTargetWindow(window: BrowserWindow | null): void {
+    this.targetWindow = window
   }
 
   private async ensureWorkspace(): Promise<void> {
@@ -232,8 +238,10 @@ class IDEService {
   }
 
   private sendTerminalOutput(data: string): void {
-    // This will be implemented when we add the window communication
     logger.info('Terminal output:', data)
+    if (this.targetWindow && !this.targetWindow.isDestroyed()) {
+      this.targetWindow.webContents.send(IpcChannel.IDE_TerminalOutput, data)
+    }
   }
 }
 

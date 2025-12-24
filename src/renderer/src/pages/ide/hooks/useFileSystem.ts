@@ -23,7 +23,7 @@ export const useFileSystem = () => {
     }
 
     initWorkspace()
-  }, [])
+  }, [loadFiles])
 
   // Load file tree
   const loadFiles = useCallback(async () => {

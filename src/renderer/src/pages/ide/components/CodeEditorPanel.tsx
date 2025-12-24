@@ -3,7 +3,7 @@ import type { CodeEditorHandles } from '@renderer/components/CodeEditor'
 import { Button, Space, Tabs } from 'antd'
 import { Save, Play, Eye, Terminal } from 'lucide-react'
 import type { FC } from 'react'
-import { useRef, useMemo, useState } from 'react'
+import { useRef, useMemo, useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -26,6 +26,12 @@ const CodeEditorPanel: FC<CodeEditorPanelProps> = ({
   const editorRef = useRef<CodeEditorHandles | null>(null)
   const [content, setContent] = useState(fileContent)
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
+
+  // Update content when fileContent changes (e.g., switching files)
+  useEffect(() => {
+    setContent(fileContent)
+    setHasUnsavedChanges(false)
+  }, [fileContent, currentFile])
 
   // Detect language from file extension
   const language = useMemo(() => {

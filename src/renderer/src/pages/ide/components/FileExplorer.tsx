@@ -75,7 +75,9 @@ const FileExplorer: FC<FileExplorerProps> = ({
   const handleCreateFile = async () => {
     if (!newItemName.trim()) return
     try {
-      const folderPath = selectedKey || ''
+      // Use the selected folder path, or root if nothing selected or a file is selected
+      const node = selectedKey ? findNode(files, selectedKey) : null
+      const folderPath = node?.type === 'folder' ? selectedKey : ''
       await onCreateFile(folderPath, newItemName)
       setIsCreateFileModalOpen(false)
       setNewItemName('')
@@ -88,7 +90,9 @@ const FileExplorer: FC<FileExplorerProps> = ({
   const handleCreateFolder = async () => {
     if (!newItemName.trim()) return
     try {
-      const parentPath = selectedKey || ''
+      // Use the selected folder path, or root if nothing selected or a file is selected
+      const node = selectedKey ? findNode(files, selectedKey) : null
+      const parentPath = node?.type === 'folder' ? selectedKey : ''
       await onCreateFolder(parentPath, newItemName)
       setIsCreateFolderModalOpen(false)
       setNewItemName('')
